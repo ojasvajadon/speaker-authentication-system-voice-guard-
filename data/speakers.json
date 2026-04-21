@@ -1,0 +1,44 @@
+[
+  {
+    "id": "speaker_1",
+    "name": "Niket Kumar",
+    "roll_number": "23AI033",
+    "branch": "Artificial Intelligence & Data Science",
+    "voice_sample": "voice_samples/niket.wav"
+  },
+  {
+    "id": "speaker_2",
+    "name": "Asmit Sharma",
+    "roll_number": "23AI017",
+    "branch": "Artificial Intelligence & Data Science",
+    "voice_sample": "voice_samples/asmit.wav"
+  },
+  {
+    "id": "speaker_3",
+    "name": "Ananya Jain",
+    "roll_number": "23AI008",
+    "branch": "Artificial Intelligence & Data Science",
+    "voice_sample": "voice_samples/ananya.wav"
+  },
+  {
+    "id": "speaker_4",
+    "name": "Sahil Khurana",
+    "roll_number": "23ME027",
+    "branch": "Mechanical",
+    "voice_sample": "voice_samples/sahil.wav"
+  },
+  {
+    "id": "speaker_5",
+    "name": "Sumit Kumar",
+    "roll_number": "23AI053",
+    "branch": "Artificial Intelligence & Data Science",
+    "voice_sample": "voice_samples/sumit.wav"
+  },
+  {
+    "id": "speaker_6",
+    "name": "Piyush Sharma",
+    "roll_number": "23AI037",
+    "branch": "Artificial Intelligence & Data Science",
+    "voice_sample": "voice_samples/piyush.wav"
+  }
+]

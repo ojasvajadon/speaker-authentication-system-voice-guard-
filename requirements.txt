@@ -1,0 +1,6 @@
+flask
+numpy
+librosa
+soundfile
+pydub
+scipy

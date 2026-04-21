@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VoiceGuard - Advanced Speaker Authentication System for Logistic Access Control">
+    <title>VoiceGuard | Speaker Authentication</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>VoiceGuard</h1>
+                    <span class="logo-subtitle">Speaker Authentication System</span>
+                </div>
+            </div>
+            <div class="header-badge">
+                <span class="badge-dot"></span>
+                <span id="system-status">System Ready</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Left Panel: Registered Speakers -->
+        <aside class="panel speakers-panel">
+            <div class="panel-header">
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="panel-icon">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    Registered Speakers
+                </h2>
+                <button class="btn-enroll" id="btn-enroll" title="Re-enroll all speakers">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="speakers-list" id="speakers-list">
+                <!-- Speaker cards inserted by JS -->
+                <div class="loading-skeleton">
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center: Authentication Panel -->
+        <section class="panel auth-panel">
+            <div class="auth-container">
+                <h2 class="auth-title">Voice Authentication</h2>
+                <p class="auth-subtitle" id="auth-instruction">Press the microphone to begin voice authentication</p>
+
+                <!-- Mic Button -->
+                <div class="mic-wrapper" id="mic-wrapper">
+                    <div class="mic-rings">
+                        <div class="mic-ring mic-ring-1"></div>
+                        <div class="mic-ring mic-ring-2"></div>
+                        <div class="mic-ring mic-ring-3"></div>
+                    </div>
+                    <button class="mic-button" id="mic-button" aria-label="Start voice authentication">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mic-icon" id="mic-icon">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" y1="19" x2="12" y2="23"/>
+                            <line x1="8" y1="23" x2="16" y2="23"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Timer -->
+                <div class="timer-container" id="timer-container">
+                    <div class="timer-bar">
+                        <div class="timer-fill" id="timer-fill"></div>
+                    </div>
+                    <span class="timer-text" id="timer-text">5s</span>
+                </div>
+
+                <!-- Waveform Visualization -->
+                <div class="waveform-container" id="waveform-container">
+                    <canvas id="waveform-canvas" width="300" height="60"></canvas>
+                </div>
+
+                <!-- Processing Indicator -->
+                <div class="processing" id="processing">
+                    <div class="processing-spinner"></div>
+                    <p>Analyzing voice pattern...</p>
+                </div>
+            </div>
+
+            <!-- Result Display -->
+            <div class="result-container" id="result-container">
+                <!-- Access Granted Card -->
+                <div class="result-card result-granted" id="result-granted">
+                    <div class="result-icon-wrapper granted-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="result-check">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <h3 class="result-title granted-title">ACCESS GRANTED</h3>
+                    <div class="result-details" id="granted-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Name</span>
+                            <span class="detail-value" id="detail-name">—</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Roll Number</span>
+                            <span class="detail-value" id="detail-roll">—</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Branch</span>
+                            <span class="detail-value" id="detail-branch">—</span>
+                        </div>
+                    </div>
+                    <div class="confidence-meter" id="confidence-meter-granted">
+                        <div class="confidence-label">
+                            <span>Confidence</span>
+                            <span class="confidence-value" id="confidence-granted">0%</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill granted-fill" id="confidence-fill-granted"></div>
+                        </div>
+                    </div>
+                    <!-- Fingerprint analysis badge injected by JS -->
+                    <div id="analysis-badge-granted"></div>
+                </div>
+
+                <!-- Access Denied Card -->
+                <div class="result-card result-denied" id="result-denied">
+                    <div class="result-icon-wrapper denied-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="result-x">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </div>
+                    <h3 class="result-title denied-title">ACCESS DENIED</h3>
+                    <p class="denied-message">Voice pattern does not match any registered speaker</p>
+                    <div class="confidence-meter" id="confidence-meter-denied">
+                        <div class="confidence-label">
+                            <span>Highest Match</span>
+                            <span class="confidence-value" id="confidence-denied">0%</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill denied-fill" id="confidence-fill-denied"></div>
+                        </div>
+                    </div>
+                    <p class="threshold-info" id="threshold-info">Threshold: 15%</p>
+                    <!-- Fingerprint analysis badge injected by JS -->
+                    <div id="analysis-badge-denied"></div>
+                </div>
+
+                <!-- Error Card -->
+                <div class="result-card result-error" id="result-error">
+                    <div class="result-icon-wrapper error-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                    </div>
+                    <h3 class="result-title error-title">ERROR</h3>
+                    <p class="error-message" id="error-message">Something went wrong</p>
+                </div>
+
+                <button class="btn-retry" id="btn-retry">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                    </svg>
+                    Try Again
+                </button>
+            </div>
+        </section>
+
+        <!-- Right Panel: Access Logs -->
+        <aside class="panel logs-panel">
+            <div class="panel-header">
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="panel-icon">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    Access Log
+                </h2>
+                <button class="btn-clear-log" id="btn-clear-log" title="Clear logs">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="logs-list" id="logs-list">
+                <div class="empty-logs">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="empty-icon">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                    <p>No access attempts yet</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>VoiceGuard — Logistic Access Control System &copy; 2026</p>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
